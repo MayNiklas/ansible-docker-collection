@@ -1,0 +1,28 @@
+#jinja2: lstrip_blocks: True
+version: '2.4'
+services:
+
+  csgo-server:
+    container_name: csgo-server
+    image: {{ csgo_docker_image }}
+    cpus: 2
+    ports:
+      - "27015:27015/udp"
+      - "27015:27015/tcp"                           # Needed for RCON
+    environment:
+      - TICKRATE={{ csgo_tickrate }}                # Set to 64 ticks by default
+      - TOKEN={{ csgo_token }}                      # Include your CS:GO API key
+      - WORKSHOPTOKEN={{ csgo_workshop_token }}     # Needed to download workshop content
+      - CSGO_HOSTNAME={{ csgo_message }}
+      - MAXPLAYERS=20
+      - GAMETYPE=0
+      - GAMEMODE=1
+      - MAPGROUP={{ csgo_mapgroup }}
+      - STARTMAP={{ csgo_map }}
+      - RCONPW="{{ csgo_rcon_pw }}"                 # Set your RCON password here!
+      - PW={{ csgo_pw }}                            # Set if password should be requiered to join
+      - REGION={{ csgo_region }}
+
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

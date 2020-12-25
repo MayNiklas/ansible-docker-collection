@@ -1,2 +1,29 @@
 ---
 # tasks file for docker-csgo-server
+
+- name: Create {{ csgo_compose_dir }} directory
+  file:
+    path: "{{ csgo_compose_dir }}"
+    state: directory
+
+- name: Create Docker Compose Configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ csgo_compose_dir }}/{{ item.file }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - file: docker-compose.yml
+      mode: "0600"
+  register: csgo_compose_config
+
+- name: Pull Docker image "{{ csgo_docker_image }}"
+  docker_image:
+    source: pull
+    name: "{{ csgo_docker_image }}"
+
+- name: Start the containers
+  docker_compose:
+    project_src: "{{ csgo_compose_dir }}"
+    restarted: "{{ csgo_compose_config is changed }}"
+  register: csgo_compose_start
+  when: csgo_start_compose|bool
