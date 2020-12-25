@@ -1,2 +1,41 @@
 ---
 # tasks file for docker-netdata
+
+- name: Create {{ netdata_compose_dir }} directory
+  file:
+    path: "{{ netdata_compose_dir }}"
+    state: directory
+
+- name: Create netdatalib directory
+  file:
+    path: "{{ netdata_compose_dir }}/netdatalib"
+    state: directory
+    mode: 0777
+
+- name: Create netdatacache directory
+  file:
+    path: "{{ netdata_compose_dir }}/netdatacache"
+    state: directory
+    mode: 0777
+
+- name: Create Docker Compose Configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ netdata_compose_dir }}/{{ item.file }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - file: docker-compose.yml
+      mode: "0600"
+  register: netdata_compose_config
+
+- name: Pull Docker image "{{ netdata_docker_image }}"
+  docker_image:
+    source: pull
+    name: "{{ netdata_docker_image }}"
+
+- name: Start the containers
+  docker_compose:
+    project_src: "{{ netdata_compose_dir }}"
+    restarted: "{{ netdata_compose_config is changed }}"
+  register: netdata_compose_start
+  when: netdata_start_compose|bool

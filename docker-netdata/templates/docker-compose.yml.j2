@@ -1,0 +1,25 @@
+#jinja2: lstrip_blocks: True
+version: '2'
+services:
+
+  netdata:
+    image: {{ netdata_docker_image }}
+    container_name: netdata
+    hostname: {{ netdata_hostname }}
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - "{{ netdata_compose_dir }}/netdatalib:/var/lib/netdata"
+      - "{{ netdata_compose_dir }}/netdatacache:/var/cache/netdata"
+    environment:
+      - PGID=998
+    ports:
+      - "{{ netdata_port }}:19999"

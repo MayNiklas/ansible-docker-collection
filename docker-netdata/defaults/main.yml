@@ -1,2 +1,8 @@
 ---
 # defaults file for docker-netdata
+
+netdata_compose_dir: "{{ ansible_env.HOME }}/netdata"
+netdata_docker_image: 'netdata/netdata'
+netdata_hostname: 'netdata-default'
+netdata_start_compose: true
+netdata_port: 19999
