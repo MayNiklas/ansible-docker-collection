@@ -1,6 +1,7 @@
 ---
 # defaults file for docker-netdata
 
+# reverse_proxy_network: web
 netdata_compose_dir: "{{ ansible_env.HOME }}/netdata"
 netdata_docker_image: 'netdata/netdata'
 netdata_hostname: 'netdata-default'

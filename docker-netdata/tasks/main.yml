@@ -28,6 +28,11 @@
       mode: "0600"
   register: netdata_compose_config
 
+- name: Create network "{{ reverse_proxy_network }}"
+  docker_network:
+    name: "{{ reverse_proxy_network }}"
+  when: reverse_proxy_network is defined
+
 - name: Pull Docker image "{{ netdata_docker_image }}"
   docker_image:
     source: pull

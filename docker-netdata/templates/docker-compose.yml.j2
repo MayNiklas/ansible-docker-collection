@@ -21,5 +21,16 @@ services:
       - "{{ netdata_compose_dir }}/netdatacache:/var/cache/netdata"
     environment:
       - PGID=998
+{% if reverse_proxy_network is not defined %}
     ports:
       - "{{ netdata_port }}:19999"
+{% endif %}
+{% if reverse_proxy_network is defined %}
+    networks:
+      - web
+
+networks:
+  web:
+    external:
+      name: web
+{% endif %}
