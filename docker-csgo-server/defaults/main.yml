@@ -1,0 +1,15 @@
+---
+# defaults file for docker-csgo-server
+
+csgo_token: you_have_to_set_this
+csgo_workshop_token: you_have_to_set_this
+csgo_pw: set_your_pw
+csgo_rcon_pw: set_your_rcon_pw
+csgo_map: de_dust
+csgo_mapgroup: mg_bomb
+csgo_message: "The GIT server playing CS"
+csgo_region: 3
+csgo_tickrate: 128
+csgo_compose_dir: "{{ ansible_env.HOME }}/csgo-server"
+csgo_docker_image: 'mayniki/csgo-server'
+csgo_start_compose: true
