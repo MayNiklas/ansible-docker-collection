@@ -1,0 +1,29 @@
+---
+# tasks file for docker-netbootxyz
+
+- name: Create {{ netbootxyz_compose_dir }} directory
+  file:
+    path: "{{ netbootxyz_compose_dir }}"
+    state: directory
+
+- name: Create Docker Compose Configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ netbootxyz_compose_dir }}/{{ item.file }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - file: docker-compose.yml
+      mode: "0600"
+  register: netbootxyz_compose_config
+
+- name: Pull Docker image "{{ netbootxyz_docker_image }}"
+  docker_image:
+    source: pull
+    name: "{{ netbootxyz_docker_image }}"
+
+- name: Start the containers
+  docker_compose:
+    project_src: "{{ netbootxyz_compose_dir }}"
+    restarted: "{{ netbootxyz_compose_config is changed }}"
+  register: netbootxyz_compose_start
+  when: netbootxyz_start_compose|bool
