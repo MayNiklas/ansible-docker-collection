@@ -1,0 +1,21 @@
+#jinja2: lstrip_blocks: True
+version: '3.0'
+services:
+
+  yt-dl:
+    image: {{ yt_dl_docker_image }}
+    container_name: yt-dl
+    restart: unless-stopped
+{% if reverse_proxy_network is not defined %}
+    ports:
+      - "{{ yt_dl_port }}:80"
+{% endif %}
+{% if reverse_proxy_network is defined %}
+    networks:
+      - {{ reverse_proxy_network }}
+
+networks:
+  {{ reverse_proxy_network }}:
+    external:
+      name: {{ reverse_proxy_network }}
+{% endif %}

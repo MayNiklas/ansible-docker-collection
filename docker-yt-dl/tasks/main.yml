@@ -1,2 +1,34 @@
 ---
 # tasks file for docker-yt-dl
+
+- name: Create {{ yt_dl_compose_dir }} directory
+  file:
+    path: "{{ yt_dl_compose_dir }}"
+    state: directory
+
+- name: Create Docker Compose Configuration
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ yt_dl_compose_dir }}/{{ item.file }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - file: docker-compose.yml
+      mode: "0600"
+  register: yt_dl_compose_config
+
+- name: Create network "{{ reverse_proxy_network }}"
+  docker_network:
+    name: "{{ reverse_proxy_network }}"
+  when: reverse_proxy_network is defined
+
+- name: Pull Docker image "{{ yt_dl_docker_image }}"
+  docker_image:
+    source: pull
+    name: "{{ yt_dl_docker_image }}"
+
+- name: Start the containers
+  docker_compose:
+    project_src: "{{ yt_dl_compose_dir }}"
+    restarted: "{{ yt_dl_compose_config is changed }}"
+  register: yt_dl_compose_start
+  when: yt_dl_start_compose|bool
