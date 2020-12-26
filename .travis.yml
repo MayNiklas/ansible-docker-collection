@@ -26,6 +26,7 @@ script:
   - ansible-playbook docker-netdata/tests/test.yml -i docker-netdata/tests/inventory --syntax-check
   - ansible-playbook docker-csgo-server/tests/test.yml -i docker-csgo-server/tests/inventory --syntax-check
   - ansible-playbook docker-netbootxyz/tests/test.yml -i docker-netbootxyz/tests/inventory --syntax-check
+  - ansible-playbook docker-yt-dl/tests/test.yml -i docker-yt-dl/tests/inventory --syntax-check
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
