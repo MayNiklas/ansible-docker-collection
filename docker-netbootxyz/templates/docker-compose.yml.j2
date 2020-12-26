@@ -1,0 +1,13 @@
+#jinja2: lstrip_blocks: True
+version: '2.1'
+services:
+
+  netbootxyz:
+    image: {{ netbootxyz_docker_image }}
+    container_name: netbootxyz
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 69:69/udp

@@ -1,2 +1,6 @@
 ---
 # defaults file for docker-netbootxyz
+
+netbootxyz_compose_dir: "{{ ansible_env.HOME }}/netbootxyz"
+netbootxyz_docker_image: 'linuxserver/netbootxyz'
+netbootxyz_start_compose: true
