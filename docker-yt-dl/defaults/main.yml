@@ -1,0 +1,8 @@
+---
+# defaults file for docker-yt-dl
+
+# reverse_proxy_network: web
+yt_dl_compose_dir: "{{ ansible_env.HOME }}/yt-dl"
+yt_dl_docker_image: 'mayniki/youtube-dl-webfrontend'
+yt_dl_start_compose: true
+yt_dl_port: 80 
