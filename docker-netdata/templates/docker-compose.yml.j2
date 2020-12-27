@@ -27,10 +27,10 @@ services:
 {% endif %}
 {% if reverse_proxy_network is defined %}
     networks:
-      - web
+      - {{ reverse_proxy_network }}
 
 networks:
-  web:
+  {{ reverse_proxy_network }}:
     external:
-      name: web
+      name: {{ reverse_proxy_network }}
 {% endif %}
